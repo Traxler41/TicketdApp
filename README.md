@@ -1,66 +1,217 @@
-## Foundry
+# 🎟️ NFT Ticketing System (Solidity + Foundry)
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+A decentralized ticketing system where each ticket is minted as an **ERC721 NFT**.
+Users can purchase tickets for events, and each ticket is represented as a unique on-chain asset.
 
-Foundry consists of:
+---
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+## 🚀 Overview
 
-## Documentation
+This project demonstrates a **real-world use case of NFTs** beyond digital art—**event ticketing**.
 
-https://book.getfoundry.sh/
+### Core Idea:
 
-## Usage
+* Each ticket = 1 NFT
+* Ownership = Proof of attendance
+* Fully on-chain minting + payment
 
-### Build
+---
 
-```shell
-$ forge build
+## 🧱 Architecture
+
+```
+User → TicketingSystem → MintNft → NFT Minted
 ```
 
-### Test
+### Flow:
 
-```shell
-$ forge test
+1. Admin creates an event
+2. Admin activates the event
+3. User buys ticket (pays ETH)
+4. NFT is minted to user
+
+---
+
+## 📦 Smart Contracts
+
+### 🔹 MintNft.sol
+
+ERC721 NFT contract responsible for minting tickets.
+
+**Features:**
+
+* One NFT minted per transaction
+* Stores token metadata (IPFS URI)
+* Tracks total supply
+* Emits mint events
+
+---
+
+### 🔹 TicketingSystem.sol
+
+Handles event logic and ticket purchasing.
+
+**Features:**
+
+* Event creation & management
+* Ticket purchase with ETH
+* NFT minting via external contract
+* Payment tracking per user
+
+---
+
+## 🧪 Testing (Foundry)
+
+Tests are written using Foundry.
+
+### Run tests:
+
+```
+forge test
 ```
 
-### Format
+### Test Coverage Includes:
 
-```shell
-$ forge fmt
+* NFT name & symbol validation
+* Event creation
+* Event activation
+* Ticket purchase flow
+
+---
+
+## 📂 Project Structure
+
+```
+src/
+├── MintNft.sol
+├── TicketingSystem.sol
+
+test/
+├── TestMintNft.t.sol
+├── TestTicketingSystem.t.sol
 ```
 
-### Gas Snapshots
+---
 
-```shell
-$ forge snapshot
+## 🌐 IPFS Integration
+
+NFT metadata is stored on IPFS.
+
+### Example tokenURI:
+
+```
+ipfs://<metadataCID>
 ```
 
-### Anvil
+### Metadata JSON structure:
 
-```shell
-$ anvil
+```json
+{
+  "name": "Match Ticket",
+  "description": "Official NFT Ticket",
+  "image": "ipfs://<imageCID>",
+  "attributes": [
+    { "trait_type": "Event", "value": "EL CLASSICO" },
+    { "trait_type": "Seat", "value": "A12" },
+    { "trait_type": "Date", "value": "2026-05-01" }
+  ]
+}
 ```
 
-### Deploy
+---
 
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
+## ⚙️ Tech Stack
+
+* Solidity (0.8.x)
+* Foundry
+* OpenZeppelin Contracts
+* IPFS (Pinata / Web3.Storage)
+
+---
+
+## 🔐 Key Features
+
+* ✅ NFT-based ticket ownership
+* ✅ Decentralized event management
+* ✅ ETH-based payments
+* ✅ Smart contract interaction (contract → contract)
+* ✅ Gas-efficient custom errors
+
+---
+
+## ⚠️ Current Limitations
+
+This is an early-stage version.
+
+* Same metadata used for all tickets
+* No seat allocation system
+* No limit on tickets per event
+* No resale or transfer restrictions
+* No entry validation (QR / scanning)
+* Mint function not restricted (can be improved)
+
+---
+
+## 🔮 Future Improvements
+
+### 🎟️ Ticket System Enhancements
+
+* Dynamic metadata per ticket (eventId + ticketId)
+* Seat allocation system
+* Event capacity limits
+
+### 🔐 Security & Logic
+
+* Restrict NFT minting to TicketingSystem only
+* Prevent duplicate ticket purchases
+* Add withdrawal system for event organizer
+
+### 📱 Real-world Features
+
+* QR-based ticket validation system
+* Mobile/web frontend (Wallet Connect)
+* Ticket resale marketplace
+
+---
+
+## 🧠 Learnings from this Project
+
+* ERC721 NFT standard implementation
+* Contract-to-contract interaction
+* Handling ETH payments in smart contracts
+* Using IPFS for decentralized storage
+* Writing tests using Foundry
+
+---
+
+## 🛠 Setup & Installation
+
+```bash
+git clone <your-repo-link>
+cd ticketdApp
+forge install
+forge build
 ```
 
-### Cast
+---
 
-```shell
-$ cast <subcommand>
-```
+## ▶️ Usage
 
-### Help
+1. Deploy `MintNft.sol`
+2. Deploy `TicketingSystem.sol` with NFT contract address
+3. Create event via `setEvent()`
+4. Activate event via `setActivateEvent()`
+5. Users call `buyTicket()` with ETH
+6. NFT is minted to user wallet
 
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+---
+
+## 👤 Author
+
+Built as a first step into **Web3 development and real-world NFT applications**.
+
+---
+
+## 📜 License
+
+MIT
